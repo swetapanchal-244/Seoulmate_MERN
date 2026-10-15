@@ -1,0 +1,14 @@
+import { Navigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+
+export default function OwnerRoute({ children }) {
+    const { user, loading } = useAuth()
+
+    if (loading) return null
+
+    if (!user || user.role !== 'owner') {
+        return <Navigate to="/owner" replace />
+    }
+
+    return children
+}

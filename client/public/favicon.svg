@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="Seoulmate logo">
+  <defs>
+    <linearGradient id="sm-gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f3dc8a"/>
+      <stop offset="0.5" stop-color="#d4af37"/>
+      <stop offset="1" stop-color="#a8821c"/>
+    </linearGradient>
+    <linearGradient id="sm-purple" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c79bff"/>
+      <stop offset="1" stop-color="#a463f2"/>
+    </linearGradient>
+  </defs>
+
+  <!-- badge -->
+  <circle cx="60" cy="60" r="57" fill="#0a0a10" stroke="url(#sm-gold)" stroke-width="3"/>
+  <circle cx="60" cy="60" r="50" fill="none" stroke="#a463f2" stroke-opacity="0.45" stroke-width="1"/>
+
+  <!-- night moon -->
+  <circle cx="33" cy="32" r="10" fill="url(#sm-gold)"/>
+  <circle cx="38" cy="29" r="9" fill="#0a0a10"/>
+
+  <!-- steam -->
+  <g fill="none" stroke="url(#sm-purple)" stroke-width="2.5" stroke-linecap="round">
+    <path d="M50 58 C45 52 55 48 50 42 C46 37 52 34 50 30"/>
+    <path d="M61 58 C56 52 66 48 61 42 C57 37 63 34 61 30" stroke-opacity="0.8"/>
+  </g>
+
+  <!-- chopsticks -->
+  <g stroke="#f3dc8a" stroke-width="2.6" stroke-linecap="round">
+    <line x1="68" y1="60" x2="92" y2="32"/>
+    <line x1="75" y1="62" x2="98" y2="38"/>
+  </g>
+
+  <!-- bowl -->
+  <path d="M26 66 H94 C94 88 78 100 60 100 C42 100 26 88 26 66 Z" fill="url(#sm-gold)"/>
+  <ellipse cx="60" cy="66" rx="34" ry="6" fill="#a8821c"/>
+  <ellipse cx="60" cy="65.5" rx="31" ry="4.2" fill="#a463f2"/>
+  <path d="M31 77 Q60 86 89 77" fill="none" stroke="#0a0a10" stroke-opacity="0.3" stroke-width="1.6" stroke-linecap="round"/>
+  <rect x="48" y="99" width="24" height="4.5" rx="2.2" fill="#a8821c"/>
+</svg>
