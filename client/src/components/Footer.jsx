@@ -1,3 +1,5 @@
+import { useNavigate, useLocation } from 'react-router-dom'
+
 const LINKS = [
   { href: '#about', label: 'About' },
   { href: '#menu', label: 'Menu' },
@@ -7,6 +9,20 @@ const LINKS = [
 ]
 
 export default function Footer() {
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const goTo = (hash) => (e) => {
+    e.preventDefault()
+    const id = hash.replace('#', '')
+
+    if (location.pathname === '/') {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    } else {
+      navigate('/', { state: { scrollTo: id } })
+    }
+  }
+
   return (
     <footer className="footer">
       <div className="footer-inner">
@@ -14,7 +30,7 @@ export default function Footer() {
         <div className="footer-grid">
 
           <div>
-            <a href="#top" className="brand footer-brand">
+            <a href="#top" className="brand footer-brand" onClick={goTo('#top')}>
               <img src="/logo.jpg" alt="Seoulmate logo" className="brand-logo" />
               <span>Seoulmate</span>
             </a>
@@ -48,7 +64,7 @@ export default function Footer() {
           <div className="footer-col">
             <h4>Quick links</h4>
             {LINKS.map((link) => (
-              <a key={link.href} href={link.href}>{link.label}</a>
+              <a key={link.href} href={link.href} onClick={goTo(link.href)}>{link.label}</a>
             ))}
           </div>
 

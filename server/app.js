@@ -13,9 +13,9 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 
 dotenv.config();
-console.log("CLIENT_URL =", JSON.stringify(process.env.CLIENT_URL));
 
 const app = express();
+app.set("trust proxy", 1);
 
 connectDB();
 

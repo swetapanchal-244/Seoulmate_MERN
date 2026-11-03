@@ -1,5 +1,9 @@
+import { lazy, Suspense } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
+
+// Three.js ka code alag chunk me jaata hai, isliye first load slow nahi hota
+const HeroScene = lazy(() => import('./HeroScene.jsx'))
 
 export default function Hero() {
   const { user } = useAuth()
@@ -16,6 +20,11 @@ export default function Hero() {
     <section className="hero" id="top">
       <div className="hero-bg" style={{ backgroundImage: "url('/hero.jpg')" }}></div>
       <div className="hero-scrim"></div>
+
+      <Suspense fallback={null}>
+        <HeroScene />
+      </Suspense>
+
       <div className="hero-content">
         <p className="hero-kicker">Gangnam street flavor, plated with intent</p>
         <h1 className="hero-title">Seoul, after<br />the sun goes down.</h1>

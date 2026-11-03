@@ -51,7 +51,7 @@ export default function Login() {
     return (
         <section className="auth-shell">
             <Link to="/" className="brand auth-brand">
-                <img src="/logo.svg" alt="Seoulmate logo" className="brand-logo" />
+                <img src="/logo.jpg" alt="Seoulmate logo" className="brand-logo" />
                 <span>Seoulmate</span>
             </Link>
 

@@ -6,11 +6,13 @@ import { API_URL } from '../api.js'
 const API_BASE = `${API_URL}/api/reservations`
 const TABLES_API = `${API_URL}/api/tables`
 
+const EMPTY_FORM = {
+  name: '', phone: '', date: '', time: '', tableNumber: '', message: '',
+}
+
 export default function Contact() {
   const { token, user } = useAuth()
-  const [form, setForm] = useState({
-    name: '', phone: '', date: '', time: '', guests: '', message: '',
-  })
+  const [form, setForm] = useState(EMPTY_FORM)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
@@ -64,7 +66,8 @@ export default function Contact() {
       const data = await res.json()
 
       if (data.success) {
-        setForm({ name: '', phone: '', date: '', time: '', guests: '', message: '' })
+        setForm(EMPTY_FORM)
+        setTables([])
         setShowSuccess(true)
       } else {
         setError(data.message || 'Something went wrong')
@@ -94,9 +97,9 @@ export default function Contact() {
           <div className="info-block">
             <h3>Good to know</h3>
             <p>
-              Free cancellation up to 2 hours before your slot.<br />
+              You can cancel a pending booking anytime from My Bookings.<br />
               Tables for 8+ guests — mention it in your message.<br />
-              Confirmation is sent to your account after booking.
+              Track your booking status in My Bookings after you reserve.
             </p>
           </div>
           <img src="/contact-image.jpg" alt="Restaurant entrance" className="contact-photo" />

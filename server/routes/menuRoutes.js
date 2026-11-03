@@ -24,7 +24,7 @@ router.post("/upload", protect, isStaff, upload.single("image"), (req, res) => {
     }
     res.status(200).json({
         success: true,
-        imgUrl: `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`,
+        imgUrl: `${process.env.SERVER_URL || `${req.protocol}://${req.get("host")}`}/uploads/${req.file.filename}`,
     });
 });
 
