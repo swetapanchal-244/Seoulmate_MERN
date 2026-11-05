@@ -1926,3 +1926,98 @@ button.nav-cta:focus-visible {
   height: 100%;
   display: block;
 }
+
+.tfp {
+  position: relative;
+  height: 340px;
+  border: 1px solid var(--border);
+  background: radial-gradient(circle at 50% 40%, #16161f 0%, #0c0c12 100%);
+  overflow: hidden;
+}
+
+.tfp-canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.tfp-canvas canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.tfp-tip {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -150%);
+  background: var(--bg-card);
+  border: 1px solid var(--gold);
+  color: var(--text);
+  font-size: 0.78rem;
+  padding: 0.35rem 0.6rem;
+  white-space: nowrap;
+  transition: opacity 0.12s;
+  z-index: 3;
+}
+
+.tfp-lock {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+  background: rgba(10, 10, 16, 0.55);
+  color: var(--text);
+  font-size: 0.9rem;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.tfp-legend {
+  position: absolute;
+  left: 0.8rem;
+  bottom: 0.6rem;
+  display: flex;
+  gap: 1rem;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.tfp-dot {
+  display: inline-block;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  margin-right: 0.35rem;
+}
+
+.tfp-dot-free {
+  background: #c9a22f;
+}
+
+.tfp-dot-sel {
+  background: #ffe08a;
+}
+
+.tfp-dot-booked {
+  background: #34343f;
+  border: 1px solid #5a5a68;
+}
+
+.tfp-note {
+  height: auto;
+  padding: 1rem;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 640px) {
+  .tfp {
+    height: 270px;
+  }
+}

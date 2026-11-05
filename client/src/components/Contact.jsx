@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import Reveal from './Reveal.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 import { API_URL } from '../api.js'
+
+const TableFloorPlan = lazy(() => import('./TableFloorPlan.jsx'))
 
 const API_BASE = `${API_URL}/api/reservations`
 const TABLES_API = `${API_URL}/api/tables`
@@ -17,7 +19,19 @@ export default function Contact() {
   const [loading, setLoading] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
   const [tables, setTables] = useState([])
+  const [baseTables, setBaseTables] = useState([]) // date/time se pehle ki poori table list (floor plan ke liye)
   const today = new Date().toLocaleDateString('en-CA')
+
+  useEffect(() => {
+    let ignore = false
+    fetch(TABLES_API)
+      .then((res) => res.json())
+      .then((data) => {
+        if (!ignore && data.success) setBaseTables(data.tables)
+      })
+      .catch(() => { })
+    return () => { ignore = true }
+  }, [])
 
   useEffect(() => {
     if (!form.date || !form.time) {
@@ -38,6 +52,9 @@ export default function Contact() {
       .catch(() => { })
     return () => { ignore = true }
   }, [form.date, form.time])
+
+  // Date+time chuna ho to availability wali list, nahi to poori list (locked dikhegi)
+  const displayTables = tables.length ? tables : baseTables
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -142,7 +159,19 @@ export default function Contact() {
             </div>
 
             <div className="form-field">
-              <label>Table</label>
+              <label>Pick your table</label>
+              <Suspense fallback={<div className="tfp tfp-note">Loading floor plan…</div>}>
+                <TableFloorPlan
+                  tables={displayTables}
+                  selected={form.tableNumber}
+                  locked={!form.date || !form.time}
+                  onSelect={(n) => setForm((prev) => ({ ...prev, tableNumber: String(n) }))}
+                />
+              </Suspense>
+            </div>
+
+            <div className="form-field">
+              <label>Or choose from list</label>
               <select name="tableNumber" value={form.tableNumber} onChange={handleChange} disabled={!form.date || !form.time} required>
                 <option value="">
                   {form.date && form.time ? 'Choose a table' : 'Select date & time first'}
