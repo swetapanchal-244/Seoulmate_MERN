@@ -19,7 +19,7 @@ export default function Contact() {
   const [loading, setLoading] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
   const [tables, setTables] = useState([])
-  const [baseTables, setBaseTables] = useState([]) // date/time se pehle ki poori table list (floor plan ke liye)
+  const [baseTables, setBaseTables] = useState([])
   const today = new Date().toLocaleDateString('en-CA')
 
   useEffect(() => {
@@ -53,7 +53,6 @@ export default function Contact() {
     return () => { ignore = true }
   }, [form.date, form.time])
 
-  // Date+time chuna ho to availability wali list, nahi to poori list (locked dikhegi)
   const displayTables = tables.length ? tables : baseTables
 
   const handleChange = (e) => {
