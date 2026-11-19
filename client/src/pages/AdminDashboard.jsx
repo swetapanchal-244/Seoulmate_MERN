@@ -225,7 +225,7 @@ export default function AdminDashboard() {
                                             <td>{r.phone}</td>
                                             <td>{r.date}</td>
                                             <td>{r.time}</td>
-                                            <td>Table {r.tableNumber} ({r.guests} seats)</td>
+                                            <td>Table {r.tableNumber} · {r.guests} {r.guests === 1 ? 'guest' : 'guests'}</td>
                                             <td>{r.user?.email || '—'}</td>
                                             <td>
                                                 <span className={`status-pill status-${r.status}`}>{r.status}</span>

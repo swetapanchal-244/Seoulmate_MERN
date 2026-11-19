@@ -111,7 +111,7 @@ export default function MyBookings() {
                                 </div>
                                 <p className="booking-card-row"><strong>Name:</strong> {b.name}</p>
                                 <p className="booking-card-row"><strong>Phone:</strong> {b.phone}</p>
-                                <p className="booking-card-row"><strong>Table:</strong> {b.tableNumber ? `Table ${b.tableNumber} (${b.guests} seats)` : '—'}</p>
+                                <p className="booking-card-row"><strong>Table:</strong> {b.tableNumber ? `Table ${b.tableNumber} · ${b.guests} ${b.guests === 1 ? 'guest' : 'guests'}` : '—'}</p>
                                 {b.message && (
                                     <p className="booking-card-row"><strong>Note:</strong> {b.message}</p>
                                 )}

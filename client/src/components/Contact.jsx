@@ -9,7 +9,7 @@ const API_BASE = `${API_URL}/api/reservations`
 const TABLES_API = `${API_URL}/api/tables`
 
 const EMPTY_FORM = {
-  name: '', phone: '', date: '', time: '', tableNumber: '', message: '',
+  name: '', phone: '', date: '', time: '', guests: '', tableNumber: '', message: '',
 }
 
 export default function Contact() {
@@ -54,10 +54,30 @@ export default function Contact() {
   }, [form.date, form.time])
 
   const displayTables = tables.length ? tables : baseTables
+  const maxSeats = displayTables.length ? Math.max(...displayTables.map((t) => t.seats)) : 6
+  const guestOptions = Array.from({ length: maxSeats }, (_, i) => i + 1)
+
+  const handleTableSelect = (n) => {
+    const table = displayTables.find((t) => t.tableNumber === Number(n))
+    if (form.guests && table && table.seats < Number(form.guests)) {
+      setError(`Table ${n} seats only ${table.seats} guests. Please pick a bigger table.`)
+      return
+    }
+    setError('')
+    setForm((prev) => ({ ...prev, tableNumber: String(n) }))
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    setForm((prev) => ({ ...prev, [name]: value }))
+    setForm((prev) => {
+      const next = { ...prev, [name]: value }
+
+      if (name === 'guests' && prev.tableNumber) {
+        const chosen = displayTables.find((t) => String(t.tableNumber) === String(prev.tableNumber))
+        if (chosen && chosen.seats < Number(value)) next.tableNumber = ''
+      }
+      return next
+    })
   }
 
   const handleSubmit = async (e) => {
@@ -66,6 +86,12 @@ export default function Contact() {
 
     if (!token) {
       setError('Please log in to reserve a table.')
+      return
+    }
+
+    const chosenTable = displayTables.find((t) => String(t.tableNumber) === String(form.tableNumber))
+    if (chosenTable && chosenTable.seats < Number(form.guests)) {
+      setError(`Table ${chosenTable.tableNumber} seats only ${chosenTable.seats} guests. Please pick a bigger table.`)
       return
     }
 
@@ -153,8 +179,22 @@ export default function Contact() {
               </div>
               <div className="form-field">
                 <label>Time</label>
-                <input type="time" name="time" value={form.time} onChange={handleChange} required />
+                <input type="time" name="time" min="12:00" max="23:30" value={form.time} onChange={handleChange} required />
               </div>
+            </div>
+
+            <p className="reserve-form-sub">
+              Bookings: 12:00 PM – 10:00 PM (Mon–Thu), 12:00 PM – 11:30 PM (Fri–Sun).
+            </p>
+
+            <div className="form-field">
+              <label>Number of guests</label>
+              <select name="guests" value={form.guests} onChange={handleChange} required>
+                <option value="">How many guests?</option>
+                {guestOptions.map((n) => (
+                  <option key={n} value={n}>{n} {n === 1 ? 'guest' : 'guests'}</option>
+                ))}
+              </select>
             </div>
 
             <div className="form-field">
@@ -164,7 +204,7 @@ export default function Contact() {
                   tables={displayTables}
                   selected={form.tableNumber}
                   locked={!form.date || !form.time}
-                  onSelect={(n) => setForm((prev) => ({ ...prev, tableNumber: String(n) }))}
+                  onSelect={handleTableSelect}
                 />
               </Suspense>
             </div>
@@ -176,8 +216,13 @@ export default function Contact() {
                   {form.date && form.time ? 'Choose a table' : 'Select date & time first'}
                 </option>
                 {tables.map((t) => (
-                  <option key={t.tableNumber} value={t.tableNumber} disabled={!t.available}>
-                    Table {t.tableNumber} - {t.seats} seats{t.available ? '' : ' (booked)'}
+                  <option
+                    key={t.tableNumber}
+                    value={t.tableNumber}
+                    disabled={!t.available || (form.guests && t.seats < Number(form.guests))}
+                  >
+                    Table {t.tableNumber} - {t.seats} seats
+                    {!t.available ? ' (booked)' : form.guests && t.seats < Number(form.guests) ? ' (too small)' : ''}
                   </option>
                 ))}
               </select>

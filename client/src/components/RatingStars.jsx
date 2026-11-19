@@ -1,12 +1,6 @@
 export default function RatingStars({ rating = 0, reviews = 0 }) {
-    // Naye dish ke abhi koi review nahi, to stars ki jagah "New" dikhao
-    if (!reviews) {
-        return (
-            <div className="rating-stars">
-                <span className="rating-count">✨ New</span>
-            </div>
-        )
-    }
+
+    if (!reviews) return null
 
     const fullStars = Math.round(rating)
 

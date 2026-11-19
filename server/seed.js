@@ -1,7 +1,3 @@
-// One-time script to migrate the old static dishes (client/src/data/dishes.js)
-// into MongoDB. Run once with: node seed.js
-// Safe to re-run — it clears the Dish collection first so you don't get duplicates.
-
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import Dish from "./models/Dish.js";
@@ -15,8 +11,6 @@ const DISHES = [
         longDesc: "A warm stone bowl of steamed rice topped with sautéed seasonal vegetables, a fried egg, and a spoon of gochujang chili paste. Mixed tableside so every bite carries a little of everything — crunch, heat, and umami.",
         price: 420,
         img: "/bibimbap.jpg",
-        rating: 4.7,
-        numReviews: 132,
     },
     {
         name: "Bulgogi",
@@ -24,8 +18,6 @@ const DISHES = [
         longDesc: "Thin-sliced ribeye marinated overnight in soy, pear, and sesame, then charcoal-grilled to a smoky char. Served with scallion and toasted sesame — sweet, savory, and tender enough to cut with a spoon.",
         price: 560,
         img: "/bulgogi.jpg",
-        rating: 4.9,
-        numReviews: 208,
     },
     {
         name: "Korean Fried Chicken",
@@ -33,8 +25,6 @@ const DISHES = [
         longDesc: "Twice-fried for a shatter-crisp crust, then tossed in a sticky gochujang-honey glaze. Sweet, spicy, and impossible to stop eating — a Seoulmate favorite.",
         price: 480,
         img: "/fried-chicken.jpg",
-        rating: 4.8,
-        numReviews: 176,
     },
     {
         name: "Japchae",
@@ -42,8 +32,6 @@ const DISHES = [
         longDesc: "Chewy sweet-potato glass noodles stir-fried with shiitake mushroom, spinach, and carrot in a light sesame-soy dressing. Naturally gluten-free and served warm.",
         price: 360,
         img: "/japchae.jpg",
-        rating: 4.5,
-        numReviews: 94,
     },
     {
         name: "Kimbap",
@@ -51,8 +39,6 @@ const DISHES = [
         longDesc: "Seaweed rice rolls packed with pickled radish, carrot, egg, and spinach, sliced into bite-size pieces. Light, portable, and a lunchtime staple across Korea.",
         price: 280,
         img: "/kimbap.jpg",
-        rating: 4.4,
-        numReviews: 61,
     },
     {
         name: "House Kimchi",
@@ -60,8 +46,6 @@ const DISHES = [
         longDesc: "Our own napa cabbage kimchi, fermented in-house for 21 days with gochugaru chili flake, garlic, and ginger. Tangy, funky, and the backbone of the menu.",
         price: 180,
         img: "/kimchi.jpg",
-        rating: 4.6,
-        numReviews: 87,
     },
     {
         name: "Spicy Ramyeon",
@@ -69,8 +53,6 @@ const DISHES = [
         longDesc: "Hand-pulled noodles in a fiery chili broth with slow-braised chashu pork, a soft-boiled egg, and a slick of chili oil on top. Built for cold nights.",
         price: 390,
         img: "/ramen.jpg",
-        rating: 4.7,
-        numReviews: 145,
     },
     {
         name: "Tteokbokki",
@@ -78,8 +60,6 @@ const DISHES = [
         longDesc: "Chewy cylindrical rice cakes simmered with fish cake in a sweet-spicy gochujang sauce. Street-food royalty in Seoul, served bubbling hot.",
         price: 320,
         img: "/tteokbokki.jpg",
-        rating: 4.6,
-        numReviews: 119,
     },
 ];
 

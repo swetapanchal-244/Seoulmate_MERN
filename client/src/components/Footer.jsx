@@ -1,11 +1,47 @@
 import { useNavigate, useLocation } from 'react-router-dom'
+import { SITE } from '../config/siteInfo.js'
 
 const LINKS = [
   { href: '#about', label: 'About' },
   { href: '#menu', label: 'Menu' },
   { href: '#chefs', label: 'Chefs' },
   { href: '#gallery', label: 'Gallery' },
+  { href: '#culture', label: 'Culture' },
   { href: '#contact', label: 'Visit' },
+]
+
+const SOCIALS = [
+  {
+    key: 'instagram',
+    label: 'Instagram',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <rect x="3" y="3" width="18" height="18" rx="5" />
+        <circle cx="12" cy="12" r="4" />
+        <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" />
+      </svg>
+    ),
+  },
+  {
+    key: 'facebook',
+    label: 'Facebook',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path d="M14 9h3V5h-3c-2.2 0-4 1.8-4 4v2H7v4h3v6h4v-6h3l1-4h-4V9c0-.6.4-1 1-1z" />
+      </svg>
+    ),
+  },
+  {
+    key: 'whatsapp',
+    label: 'WhatsApp',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path d="M20 12a8 8 0 1 1-3.6-6.7" />
+        <path d="M20 12a8 8 0 0 0-8-8" />
+        <path d="M8.5 9.5c.3 2.5 2.5 4.7 5 5l1-1.5-2-1-1 .8a4 4 0 0 1-2.3-2.3l.8-1-1-2-1.5 1z" />
+      </svg>
+    ),
+  },
 ]
 
 export default function Footer() {
@@ -23,6 +59,8 @@ export default function Footer() {
     }
   }
 
+  const activeSocials = SOCIALS.filter((s) => SITE[s.key])
+
   return (
     <footer className="footer">
       <div className="footer-inner">
@@ -38,27 +76,22 @@ export default function Footer() {
               Modern Korean kitchen and bar — charcoal grills, hand-pulled
               noodles and a room that glows after dark.
             </p>
-            <div className="footer-social">
-              <a href="#" className="social-icon" aria-label="Instagram">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                  <rect x="3" y="3" width="18" height="18" rx="5" />
-                  <circle cx="12" cy="12" r="4" />
-                  <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" />
-                </svg>
-              </a>
-              <a href="#" className="social-icon" aria-label="Facebook">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                  <path d="M14 9h3V5h-3c-2.2 0-4 1.8-4 4v2H7v4h3v6h4v-6h3l1-4h-4V9c0-.6.4-1 1-1z" />
-                </svg>
-              </a>
-              <a href="#" className="social-icon" aria-label="WhatsApp">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                  <path d="M20 12a8 8 0 1 1-3.6-6.7" />
-                  <path d="M20 12a8 8 0 0 0-8-8" />
-                  <path d="M8.5 9.5c.3 2.5 2.5 4.7 5 5l1-1.5-2-1-1 .8a4 4 0 0 1-2.3-2.3l.8-1-1-2-1.5 1z" />
-                </svg>
-              </a>
-            </div>
+            {activeSocials.length > 0 && (
+              <div className="footer-social">
+                {activeSocials.map((s) => (
+                  <a
+                    key={s.key}
+                    href={SITE[s.key]}
+                    className="social-icon"
+                    aria-label={s.label}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {s.icon}
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="footer-col">
@@ -72,8 +105,8 @@ export default function Footer() {
             <h4>Contact</h4>
             <p>14 Lantern Street, Ring Road</p>
             <p>Surat, Gujarat 395007</p>
-            <a href="tel:+919876543210">+91 98765 43210</a>
-            <a href="mailto:hello@seoulmate.rest">hello@seoulmate.rest</a>
+            {SITE.phone && <a href={`tel:${SITE.phone.replace(/\s/g, '')}`}>{SITE.phone}</a>}
+            {SITE.email && <a href={`mailto:${SITE.email}`}>{SITE.email}</a>}
           </div>
 
         </div>

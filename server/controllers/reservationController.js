@@ -6,7 +6,27 @@ const PHONE_REGEX = /^\+?[0-9\s-]{10,15}$/;
 const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 const TIME_REGEX = /^([01]\d|2[0-3]):[0-5]\d$/;
 
-// 2026-02-31 jaisi nakli dates pakadne ke liye
+const OPEN_MINUTES = 12 * 60;
+const LAST_BOOKING_WEEKDAY = 22 * 60; 
+const LAST_BOOKING_WEEKEND = 23 * 60 + 30; 
+
+const formatMinutes = (m) => {
+    const h24 = Math.floor(m / 60);
+    const min = String(m % 60).padStart(2, "0");
+    const suffix = h24 >= 12 ? "PM" : "AM";
+    const h12 = h24 % 12 === 0 ? 12 : h24 % 12;
+    return `${h12}:${min} ${suffix}`;
+};
+
+const getBookingWindow = (date) => {
+    const day = new Date(`${date}T00:00:00Z`).getUTCDay(); 
+    const isWeekend = day === 5 || day === 6 || day === 0;
+    return {
+        open: OPEN_MINUTES,
+        last: isWeekend ? LAST_BOOKING_WEEKEND : LAST_BOOKING_WEEKDAY,
+    };
+};
+
 const isRealDate = (d) => {
     const parsed = new Date(`${d}T00:00:00Z`);
     return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === d;
@@ -18,8 +38,9 @@ export const createReservation = async (req, res) => {
         const phone = String(req.body.phone || "").trim();
         const message = String(req.body.message || "").trim();
         const { date, time, tableNumber } = req.body;
+        const guests = Number(req.body.guests);
 
-        if (!name || !phone || !date || !time || !tableNumber) {
+        if (!name || !phone || !date || !time || !tableNumber || !req.body.guests) {
             return res.status(400).json({
                 success: false,
                 message: "All fields are required",
@@ -54,6 +75,16 @@ export const createReservation = async (req, res) => {
             });
         }
 
+        const bookingWindow = getBookingWindow(date);
+        const wanted = toMinutes(time);
+
+        if (wanted < bookingWindow.open || wanted > bookingWindow.last) {
+            return res.status(400).json({
+                success: false,
+                message: `Bookings are accepted between ${formatMinutes(bookingWindow.open)} and ${formatMinutes(bookingWindow.last)} on this day`,
+            });
+        }
+
         const now = getIndiaNow();
 
         if (date < now.date) {
@@ -79,7 +110,20 @@ export const createReservation = async (req, res) => {
             });
         }
 
-        // Same date + table ki requests line me chalti hain, isliye double-booking possible hi nahi
+        if (!Number.isInteger(guests) || guests < 1) {
+            return res.status(400).json({
+                success: false,
+                message: "Please enter a valid number of guests",
+            });
+        }
+
+        if (guests > table.seats) {
+            return res.status(400).json({
+                success: false,
+                message: `Table ${table.tableNumber} seats only ${table.seats} guests. Please pick a bigger table.`,
+            });
+        }
+
         const result = await withTableLock(`${date}:${table.tableNumber}`, async () => {
             const booked = await getBookedTableNumbers(date, time);
 
@@ -94,7 +138,7 @@ export const createReservation = async (req, res) => {
                 date,
                 time,
                 tableNumber: table.tableNumber,
-                guests: table.seats,
+                guests,
                 message,
             });
 
@@ -127,8 +171,6 @@ export const getMyReservations = async (req, res) => {
     }
 };
 
-// ---- Cancel own reservation (regular user) ----
-
 export const cancelMyReservation = async (req, res) => {
     try {
         const reservation = await Reservation.findOne({
@@ -158,8 +200,6 @@ export const cancelMyReservation = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
-
-// ---- Admin only ----
 
 export const getAllReservations = async (req, res) => {
     try {
