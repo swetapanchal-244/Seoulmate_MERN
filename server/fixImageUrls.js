@@ -1,7 +1,3 @@
-// One-time script: jin dishes ki image ka URL localhost se bana hai (Menu Manager se upload ki gayi),
-// unka URL "/filename.jpg" kar deta hai, taaki image client/public folder se load ho.
-// Chalane ka tareeka (server folder me): node fixImageUrls.js
-
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import Dish from "./models/Dish.js";
